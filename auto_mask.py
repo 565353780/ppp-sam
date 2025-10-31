@@ -1356,9 +1356,6 @@ if __name__ == "__main__":
     argparser.add_argument(
         "--sonata_path", type=str, default=None, help="Sonata模型路径"
     )
-    argparser.add_argument(
-        "--sonata_config_path", type=str, default=None, help="Sonata config路径"
-    )
     argparser.add_argument("--ckpt_path", type=str, default=None, help="模型路径")
     argparser.add_argument(
         "--mesh_path", type=str, default="assets/1.glb", help="输入网格路径"
@@ -1380,7 +1377,7 @@ if __name__ == "__main__":
     argparser.add_argument("--seed", type=int, default=42, help="随机种子")
     argparser.add_argument("--parallel", type=int, default=1, help="是否使用多卡")
     argparser.add_argument(
-        "--prompt_bs", type=int, default=32, help="提示点推理时的batch size大小"
+        "--prompt_bs", type=int, default=8, help="提示点推理时的batch size大小"
     )
     argparser.add_argument("--clean_mesh", type=int, default=1, help="是否清洗网格")
     args = argparser.parse_args()
@@ -1415,6 +1412,7 @@ if __name__ == "__main__":
                 seed=args.seed,
                 is_parallel=args.parallel,
                 clean_mesh_flag=args.clean_mesh,
+                prompt_bs=args.prompt_bs,
             )
     else:
         mesh = trimesh.load(mesh_path, force="mesh")
@@ -1431,6 +1429,7 @@ if __name__ == "__main__":
             seed=args.seed,
             is_parallel=args.parallel,
             clean_mesh_flag=args.clean_mesh,
+            prompt_bs=args.prompt_bs,
         )
 
     ###############################################
