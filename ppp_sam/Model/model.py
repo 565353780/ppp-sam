@@ -1,6 +1,6 @@
-import json
 import torch
 import torch.nn as nn
+from safetensors.torch import load_file
 
 from ppp_sam.Model import sonata
 
@@ -117,7 +117,8 @@ def load_state_dict(
     ignore_iou_mlp=False,
 ):  # load checkpoint
     if ckpt_path is not None:
-        state_dict = torch.load(ckpt_path, map_location="cpu")["state_dict"]
+        # state_dict = torch.load(ckpt_path, map_location="cpu")["state_dict"]
+        state_dict = load_file(ckpt_path)
     elif state_dict is None:
         # download from huggingface
         print(f"trying to download model from huggingface...")
