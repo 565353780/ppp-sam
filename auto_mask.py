@@ -1,63 +1,10 @@
 import os
-import torch
-import random
 import trimesh
-import argparse
-import numpy as np
 
-from ppp_sam.Model.auto_mask import AutoMask
-from ppp_sam.Module.timer import Timer
-
-
-def set_seed(seed):
-    random.seed(seed)
-    np.random.seed(seed)
-    torch.manual_seed(seed)
-    if torch.cuda.is_available():
-        torch.cuda.manual_seed(seed)
-        torch.cuda.manual_seed_all(seed)
-        torch.backends.cudnn.deterministic = True
-        torch.backends.cudnn.benchmark = False
+from ppp_sam.Method.utils import set_seed
 
 
 if __name__ == "__main__":
-    argparser = argparse.ArgumentParser()
-    argparser.add_argument(
-        "--sonata_path", type=str, default=None, help="Sonata模型路径"
-    )
-    argparser.add_argument("--ckpt_path", type=str, default=None, help="模型路径")
-    argparser.add_argument(
-        "--mesh_path", type=str, default="assets/1.glb", help="输入网格路径"
-    )
-    argparser.add_argument(
-        "--output_path", type=str, default="results/1", help="保存路径"
-    )
-    argparser.add_argument("--point_num", type=int, default=100000, help="采样点数量")
-    argparser.add_argument("--prompt_num", type=int, default=400, help="提示数量")
-    argparser.add_argument("--threshold", type=float, default=0.95, help="阈值")
-    argparser.add_argument("--post_process", type=int, default=0, help="是否后处理")
-    argparser.add_argument(
-        "--save_mid_res", type=int, default=1, help="是否保存中间结果"
-    )
-    argparser.add_argument("--show_info", type=int, default=1, help="是否显示信息")
-    argparser.add_argument(
-        "--show_time_info", type=int, default=1, help="是否显示时间信息"
-    )
-    argparser.add_argument("--seed", type=int, default=42, help="随机种子")
-    argparser.add_argument("--parallel", type=int, default=1, help="是否使用多卡")
-    argparser.add_argument(
-        "--prompt_bs", type=int, default=8, help="提示点推理时的batch size大小"
-    )
-    argparser.add_argument("--clean_mesh", type=int, default=1, help="是否清洗网格")
-    args = argparser.parse_args()
-    Timer.STATE = args.show_time_info
-
-    output_path = args.output_path
-    os.makedirs(output_path, exist_ok=True)
-    sonata_model_file_path = args.sonata_path
-    ckpt_path = args.ckpt_path
-    auto_mask = AutoMask(sonata_model_file_path, ckpt_path)
-    mesh_path = args.mesh_path
     if os.path.isdir(mesh_path):
         for file in os.listdir(mesh_path):
             if not (

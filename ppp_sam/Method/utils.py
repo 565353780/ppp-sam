@@ -1,4 +1,5 @@
 import torch
+import random
 import trimesh
 import numpy as np
 from tqdm import tqdm
@@ -617,3 +618,14 @@ def sort_multi_list(multi_list, key=lambda x: x[0], reverse=False):
     """
     sorted_list = sorted(zip(*multi_list), key=key, reverse=reverse)
     return zip(*sorted_list)
+
+
+def set_seed(seed):
+    random.seed(seed)
+    np.random.seed(seed)
+    torch.manual_seed(seed)
+    if torch.cuda.is_available():
+        torch.cuda.manual_seed(seed)
+        torch.cuda.manual_seed_all(seed)
+        torch.backends.cudnn.deterministic = True
+        torch.backends.cudnn.benchmark = False
